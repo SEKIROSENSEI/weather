@@ -2,7 +2,130 @@
 <html>
 <head>
   <style>
-    /* Add your CSS styles here */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .weather-container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .city {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .description {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .temp, .humidity, .wind {
+      margin-bottom: 5px;
+    }
+
+    .product-recommendations {
+      margin-top: 20px;
+    }
+
+    .product-item {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .product-image {
+      width: 100px;
+      height: 100px;
+      margin-right: 10px;
+    }
+
+    .product-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .product-price {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .product-description {
+      margin-bottom: 5px;
+    }
+
+    .product-rating {
+      font-style: italic;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .popup.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .popup h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .popup p {
+      margin-bottom: 10px;
+    }
+
+    .popup button {
+      padding: 10px 20px;
+      background-color: #2196F3;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -18,79 +141,4 @@
   </div>
 
   <div class="product-recommendations">
-    <h3>Product Recommendations</h3>
-    <div id="product-list"></div>
-  </div>
-
-  <div class="popup">
-    <div class="popup-content">
-      <h2>No weather found</h2>
-      <p>Please enter a valid city name.</p>
-      <button id="dismiss-popup-btn">Dismiss</button>
-    </div>
-  </div>
-
-  <script>
-    let weather = {
-      apiKey: "5b47c3f40d1e22ba16d5c99894178e9f",
-      fetchWeather: function (city) {
-        fetch(
-          "https://api.openweathermap.org/data/2.5/weather?q=" +
-          city +
-          "&units=metric&appid=" +
-          this.apiKey
-        )
-        .then((response) => {
-          if (!response.ok) {
-            document.getElementsByClassName("popup")[0].classList.add("active");
-            throw new Error("No weather found.");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          this.displayWeather(data);
-          this.fetchProductRecommendations(data.weather[0].description);
-        })
-        .catch((error) => {
-          console.error("Error fetching weather:", error);
-        });
-      },
-      displayWeather: function (data) {
-        const { name } = data;
-        const { country } = data.sys;
-        const { icon, description } = data.weather[0];
-        const { temp, humidity } = data.main;
-        const { speed } = data.wind;
-        document.querySelector(".city").innerText = name + ", " + country;
-        document.querySelector(".icon").src =
-          "https://openweathermap.org/img/wn/" + icon + ".png";
-        document.querySelector(".description").innerText = description;
-        document.querySelector(".temp").innerText = temp + "°C";
-        document.querySelector(".humidity").innerText =
-          "Humidity: " + humidity + "%";
-        document.querySelector(".wind").innerText =
-          "Wind speed: " + speed + " km/h";
-        document.querySelector(".weather-container").classList.remove("loading");
-        document.body.style.backgroundImage =
-          "url('https://source.unsplash.com/1600x1200/?" + description + "')";
-      },
-      fetchProductRecommendations: function (weatherDescription) {
-        // Replace 'YOUR_API_ENDPOINT' with the actual endpoint for your backend server or proxy
-        const apiEndpoint = 'YOUR_API_ENDPOINT';
-
-        // Make an API call to your backend server or proxy to retrieve Amazon product recommendations based on the weather description
-        fetch(apiEndpoint + '?weather=' + weatherDescription)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Error fetching product recommendations.");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            this.displayProductRecommendations(data);
-          })
-          .catch((error) => {
-            console.error("Error fetching product recommendations:", error);
-          });
-      },
-      display
+    <h3>Product
