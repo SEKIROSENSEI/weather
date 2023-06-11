@@ -76,7 +76,7 @@
       },
       fetchProductRecommendations: function (weatherDescription) {
         // Replace 'YOUR_API_ENDPOINT' with the actual endpoint for your backend server or proxy
-        const apiEndpoint = 'YOUR_API_ENDPOINT';
+        const apiEndpoint = 'amazon23.p.rapidapi.com';
 
         // Make an API call to your backend server or proxy to retrieve Amazon product recommendations based on the weather description
         fetch(apiEndpoint + '?weather=' + weatherDescription)
