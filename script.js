@@ -2,14 +2,126 @@
 <html>
 <head>
   <style>
-    /* CSS styles for the recommendation section */
-    /* ... */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .weather-app {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .search {
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .search-button {
+      padding: 6px 12px;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .weather {
+      margin-bottom: 20px;
+    }
+
+    .weather-info {
+      margin-bottom: 10px;
+    }
+
+    .weather-icon img {
+      width: 100px;
+    }
+
+    .recommendations {
+      text-align: left;
+    }
+
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .product-item {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+    }
+
+    .product-image {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .product-title {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .product-price {
+      margin-top: 5px;
+    }
+
+    .product-description {
+      margin-top: 5px;
+    }
+
+    .product-rating {
+      margin-top: 5px;
+      font-style: italic;
+      color: #888;
+    }
   </style>
 </head>
 <body>
-  <div class="recommendation-container">
-    <h2 class="recommendation-heading">Product Recommendations</h2>
-    <div id="product-list"></div>
+  <div class="weather-app">
+    <h1>Weather App</h1>
+
+    <div class="search">
+      <input type="text" class="search-bar" placeholder="Enter city name">
+      <button class="search-button">Search</button>
+    </div>
+
+    <div class="weather">
+      <div class="weather-info">
+        <div class="city"></div>
+        <div class="description"></div>
+        <div class="temperature"></div>
+        <div class="humidity"></div>
+        <div class="wind"></div>
+      </div>
+      <div class="weather-icon"></div>
+    </div>
+
+    <div class="recommendations">
+      <h2>Product Recommendations</h2>
+      <div class="product-list"></div>
+    </div>
   </div>
 
   <script>
@@ -37,7 +149,6 @@
         });
       },
       displayWeather: function (data) {
-        // Display weather information
         const { name } = data;
         const { country } = data.sys;
         const { icon, description } = data.weather[0];
@@ -45,17 +156,11 @@
         const { speed } = data.wind;
 
         document.querySelector(".city").innerText = name + ", " + country;
-        document.querySelector(".icon").src =
-          "https://openweathermap.org/img/wn/" + icon + ".png";
         document.querySelector(".description").innerText = description;
-        document.querySelector(".temp").innerText = temp + "°C";
-        document.querySelector(".humidity").innerText =
-          "Humidity: " + humidity + "%";
-        document.querySelector(".wind").innerText =
-          "Wind speed: " + speed + " km/h";
-        document.querySelector(".weather").classList.remove("loading");
-        document.body.style.backgroundImage =
-          "url('https://source.unsplash.com/1600x1200/?" + description + "')";
+        document.querySelector(".temperature").innerText = "Temperature: " + temp + "°C";
+        document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
+        document.querySelector(".wind").innerText = "Wind speed: " + speed + " km/h";
+        document.querySelector(".weather-icon").innerHTML = `<img src="https://openweathermap.org/img/wn/${icon}.png" alt="${description}">`;
       },
       fetchProductRecommendations: function (weatherDescription) {
         // Replace 'YOUR_API_ENDPOINT' with the actual endpoint for your backend server or proxy
@@ -70,7 +175,6 @@
           return response.json();
         })
         .then((data) => {
-          // Display the Amazon product recommendations
           this.displayProductRecommendations(data);
         })
         .catch((error) => {
@@ -78,7 +182,7 @@
         });
       },
       displayProductRecommendations: function (productData) {
-        const productListElement = document.getElementById('product-list');
+        const productListElement = document.querySelector('.product-list');
 
         // Clear the existing product list
         productListElement.innerHTML = '';
@@ -94,5 +198,50 @@
           productImage.alt = product.title;
           productItem.appendChild(productImage);
 
-          const productDetails = document.createElement('div');
-          productDetails.classList.add
+          const productTitle = document.createElement('div');
+          productTitle.classList.add('product-title');
+          productTitle.innerText = product.title;
+          productItem.appendChild(productTitle);
+
+          const productPrice = document.createElement('div');
+          productPrice.classList.add('product-price');
+          productPrice.innerText = "Price: " + product.price;
+          productItem.appendChild(productPrice);
+
+          const productDescription = document.createElement('div');
+          productDescription.classList.add('product-description');
+          productDescription.innerText = product.description;
+          productItem.appendChild(productDescription);
+
+          const productRating = document.createElement('div');
+          productRating.classList.add('product-rating');
+          productRating.innerText = "Rating: " + product.rating;
+          productItem.appendChild(productRating);
+
+          productListElement.appendChild(productItem);
+        });
+      }
+    };
+
+    function searchWeather() {
+      const searchInput = document.querySelector('.search-bar');
+      const city = searchInput.value;
+      if (city) {
+        weather.fetchWeather(city);
+      } else {
+        alert("Please enter a city name.");
+      }
+    }
+
+    document.querySelector('.search-button').addEventListener('click', searchWeather);
+
+    document.querySelector('.search-bar').addEventListener('keyup', function (event) {
+      if (event.key === 'Enter') {
+        searchWeather();
+      }
+    });
+
+    weather.fetchWeather("Delhi");
+  </script>
+</body>
+</html>
